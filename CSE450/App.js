@@ -1,14 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Header from './components/Header';
-import Home from './components/Home';
-import Navigator from './components/Drawer'
-import {NavigationContainer} from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
+import React, {useContext} from 'react'
+import MainNavigator from './components/Navigation/MainNavigator.js';
+import { Provider } from 'react-redux';
+import {store} from './components/store';
+import Drawerout from './components/Navigation/Drawerout'
+import Drawer from './components/Navigation/Drawer'
+
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Navigator/>
-    </View>
+        <Provider store={store}>
+          <MainNavigator/>
+        </Provider>
   )
 }
 

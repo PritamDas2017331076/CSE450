@@ -8,6 +8,7 @@ const authStudent = async(req, res, next) => {
         const student = await Student.findOne({ _id: decode._id, 'tokens.token': token })
         if (!student)
             throw new Error()
+        console.log(student)
         req.token = token
         req.student = student
         next();

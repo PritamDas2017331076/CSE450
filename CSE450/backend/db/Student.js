@@ -6,22 +6,52 @@ const SALT_FACTOR = 10;
 
 
 const studentSchema = new Schema({
-    user: {
+    name: {
         type: String,
         required: true,
-        unique: true,
-        trim: true,
         minlength: 3
     },
     email: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
+    },
+    registration_number: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    university: {
+        type: String,
+        required: true
+    },
+    department: {
+        type: String,
+        required: true
     },
     session: {
         type: String,
+        required: true
+    },
+    post: {
+        type: String,
+        required: true
+    },
+    activated: {
+        type: Boolean,
+        required: true
+    },
+    status: {
+        type: Boolean,
+        required: true
+    },
+    secret: {
+        type: String,
         required: true,
-        unique: true,
     },
     password: {
         type: String,
@@ -52,19 +82,29 @@ studentSchema.methods.generateAuthToken = async function() {
     return token;
 }
 
+studentSchema.methods.enter = async function() {
+    const student = this
+    console.log('logged enter ', student)
+    await student.save()
+    return student
+}
 
 
 
-studentSchema.statics.findByCredentials = async(user, password) => {
+
+studentSchema.statics.findByCredentials = async(email, password) => {
     try {
-        const student = await Student.findOne({ user })
+        const student = await Student.findOne({ email })
         if (!student) {
             return 'user not found'
         }
+        console.log('student ', student)
+        console.log(password, student.password)
         const isMatch = await bcrypt.compare(password, student.password)
         if (!isMatch) {
+            console.log('not matched')
             return 'pass not matched'
-        }
+        } else { console.log('matched') }
         return student;
     } catch (e) {
         return "Can't log in"

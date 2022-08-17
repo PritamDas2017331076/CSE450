@@ -1,19 +1,12 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import {Text, View, StyleSheet, Button} from 'react-native'
 
 export default function Home({navigation}){
 
-    const pressHandles = () => {
-
-        navigation.navigate('About')
-
-    }
-
     return(
         <View style={styles.container}>
-          <Text style={styles.text}>This is home screen</Text>
-          <Button title='go to about page' style={styles.button} onPress={pressHandles} />
-        </View>  
+            <Text>Home</Text>
+        </View>
     )
 }
 
@@ -22,6 +15,9 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 80,
         padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'red',
         backgroundColor: '#fff'
     },
     text:{
