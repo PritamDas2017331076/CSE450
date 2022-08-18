@@ -1,5 +1,5 @@
 import React from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {Text, View, StyleSheet,ScrollView} from 'react-native'
 import { Form, FormItem, Picker } from 'react-native-form-component';
@@ -28,6 +28,20 @@ export default function UAdminRegister({navigation}){
     const [university, setUniversity] = useState('')
     const [rpassword, setRPassword] = useState('')
     const [activated, setActivated] = useState(false)
+    const [list, setList] = useState([])
+
+    useEffect(() => {
+          axios.get(`http://${ip}:5000/universities`)
+          .then(res => {
+              console.log('data ', res.data) 
+
+              setList(res.data.map( (s) => {
+                return {value:s.key, label:s.key}
+            }))
+            console.log(list)
+         }) ;
+  
+    }, []);
 
     const onSubmit = (e) => {
         //e.preventDefault()
@@ -128,17 +142,11 @@ export default function UAdminRegister({navigation}){
                     asterik
                   />
                 <Picker
-                    items={[
-                    { label: 'SUST', value: 'SUST' },
-                    { label: 'BUET', value: 'BUET' },
-                    { label: 'KUET', value: 'KUET' },
-                    { label: 'RUET', value: 'RUET' },
-                    { label: 'CUET', value: 'CUET' },
-                   ]}
+                    items={list}
                     label="Pick a University"
                     style={styles.box}
                     selectedValue={university}
-                    onSelection={(item) => setUniversity(item.value)}
+                    onSelection={(item) => setUniversity(item.label)}
                    />
                 <FormItem
                     label="Password"

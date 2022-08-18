@@ -46,7 +46,20 @@ app.use('/approve', Approval);
 const ApprovalS = require('./api/ApprovalS.js');
 app.use('/approveS', ApprovalS);
 
+const universities = require('./api/Universities');
+app.use('/universities', universities);
 
+const departments = require('./api/Departments');
+app.use('/departments', departments);
+
+const session = require('./api/Session');
+app.use('/session', session);
+
+const section = require('./api/Section');
+app.use('/section', section);
+
+const course = require('./api/Course');
+app.use('/course', course);
 
 app.listen(port, () => {
     console.log(`Server is running on port : ${port}`);
