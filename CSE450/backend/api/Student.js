@@ -124,8 +124,9 @@ router.route('/login').post(async(req, res) => {
         const department = student.department
         const name = student.name
         const email = student.email
+        const id = student._id
         console.log(student)
-        res.status(200).send({ student, token, post, university, department, name, email })
+        res.status(200).send({ student, token, post, university, department, name, email, id })
     } catch (e) {
         res.status(400).json(e)
     }

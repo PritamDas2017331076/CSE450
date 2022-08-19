@@ -13,6 +13,13 @@ import PrintT from '../Print/PrintT'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import Session from '../Lists/Session'
+import Course from '../Lists/Course'
+import Courses from '../Create/Course'
+import Section from '../Lists/Section'
+import StudentlistL from '../Lists/Studentlist'
+import Sectionform from '../Lists/Sectionform'
+import Sections from '../Create/Section'
 import {
   updateEmail,
   updateName,
@@ -29,9 +36,9 @@ import {
   
 } from '../Loginslice'
 
-/*const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 
-function ApprovalList(){
+/*function ApprovalList(){
   return(
       <Stack.Navigator>
           <Stack.Screen name="Teacher List" component={Teacherlist} />
@@ -39,6 +46,22 @@ function ApprovalList(){
       </Stack.Navigator>
   )
 }*/
+
+function ApprovalList(){
+  const university = useSelector(selectUniversity)
+  const department = useSelector(selectDepartment)
+  return(
+      <Stack.Navigator>
+          <Stack.Screen name="Session List" component={Session} initialParams={{university: university, department: department}} />
+          <Stack.Screen name="Course List" component={Course} />
+          <Stack.Screen name="Section List" component={Section} />
+          <Stack.Screen name="Sectionform" component={Sectionform} />
+          <Stack.Screen name="Student List" component={StudentlistL} />
+          <Stack.Screen name="Create Section" component={Sections} />
+          <Stack.Screen component={Courses} name="Create Course" />
+      </Stack.Navigator>
+  )
+}
 
 
 
@@ -113,6 +136,7 @@ export default function Drawer_S({navigation}){
     const DrawerNavigator = ()=>{
       return (
         <Drawer.Navigator drawerContent = {(props)=><CustomDrawer {...props} />} >
+          <Drawer.Screen component={ApprovalList} name="Sessions" />
           <Drawer.Screen component={Home} name="Home" />
           <Drawer.Screen component={About} name="About" />
         </Drawer.Navigator>

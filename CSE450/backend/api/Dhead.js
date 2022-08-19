@@ -17,6 +17,8 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 })
 
+
+
 router.get('/me', authDhead, async(req, res) => {
     try {
         res.status(200).send(req.dhead)
@@ -123,7 +125,8 @@ router.route('/login').post(async(req, res) => {
         const department = dhead.department
         const name = dhead.name
         const email = dhead.email
-        res.status(200).send({ dhead, token, post, department, university, name, email })
+        const id = dhead._id
+        res.status(200).send({ dhead, token, post, department, university, name, email, id })
     } catch (e) {
         res.status(400).json(e)
     }

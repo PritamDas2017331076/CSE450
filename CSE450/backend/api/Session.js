@@ -10,13 +10,22 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 })
 
+router.route('/ud').get((req, res) => {
+    const university = req.query.university
+    const department = req.query.department
+    Session.find({ university: university, department: department })
+        .then(session => res.json(session))
+        .catch(err => res.status(400).json('Error: ' + err));
+})
+
 router.post('/add', async(req, res) => {
-    const Session = new Session({...req.body });
+    const session = new Session({...req.body });
+    console.log(session)
 
     try {
-        console.log(Session)
-        await Session.save();
-        res.status(200).send({ Session })
+        console.log(session)
+        await session.save();
+        res.status(200).send({ session })
     } catch (e) {
         res.status(400).send(e);
     }
@@ -26,10 +35,10 @@ router.post('/add', async(req, res) => {
 
 router.get('/:id', async(req, res) => {
     try {
-        const Session = await Session.findById({ _id: req.params.id })
-        if (!Session)
+        const session = await Session.findById({ _id: req.params.id })
+        if (!session)
             return res.status(404).send()
-        res.status(200).send(Session)
+        res.status(200).send(session)
     } catch (e) {
         res.status(400).send()
     }
@@ -37,10 +46,10 @@ router.get('/:id', async(req, res) => {
 
 router.delete('/:id', async(req, res) => {
     try {
-        const Session = await Session.findByIdAndDelete(req.params.id)
-        if (!Session)
+        const session = await Session.findByIdAndDelete(req.params.id)
+        if (!session)
             return res.status(404).send()
-        res.status(200).send(Session)
+        res.status(200).send(session)
 
     } catch (e) {
         res.status(400).send()

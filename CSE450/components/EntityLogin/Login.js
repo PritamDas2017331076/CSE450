@@ -11,6 +11,7 @@ import {
   updatePost,
   updateUniversity,
   updateDepartment,
+  updateId,
   selectEmail,
   selectName,
   selectToken,
@@ -75,6 +76,7 @@ export default function Studentlogin({navigation}){
                   console.log('data token ',res.data.token)
                   dispatch(updateToken(res.data.token))
                   dispatch(updatePost(res.data.post))
+                  dispatch(updateId(res.data.id))
                   if(res.data.university) dispatch(updateUniversity(res.data.university))
                   if(res.data.department) dispatch(updateDepartment(res.data.department))
                   if(res.data.name) dispatch(updateName(res.data.name))

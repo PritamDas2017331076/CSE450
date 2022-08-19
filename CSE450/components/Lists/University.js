@@ -15,7 +15,7 @@ export default function University({navigation}){
     useEffect(() => {
         axios.get(`http://${ip}:5000/university_admin`)
         .then(res => {
-            console.log('for ',university,' data ', res.data) 
+            console.log(' data ', res.data) 
             setList(res.data)
        }) ;
     }, []);

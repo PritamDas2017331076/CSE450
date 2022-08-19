@@ -6,7 +6,8 @@ const initialState = {
     token: '',
     post: '',
     university: '',
-    department: ''
+    department: '',
+    id: ''
 }
 
 export const loginSlice = createSlice({
@@ -30,7 +31,10 @@ export const loginSlice = createSlice({
         },
         updateDepartment: (state, action) => {
             state.department = action.payload
-        }
+        },
+        updateId: (state, action) => {
+            state.id = action.payload
+        },
 
     }
 })
@@ -41,7 +45,8 @@ export const {
     updateToken,
     updatePost,
     updateUniversity,
-    updateDepartment
+    updateDepartment,
+    updateId
 } = loginSlice.actions
     /*
         updateEmail,
@@ -50,12 +55,14 @@ export const {
         updatePost,
         updateUniversity,
         updateDepartment,
+        updateId,
         selectEmail,
         selectName,
         selectToken,
         selectPost,
         selectUniversity,
-        selectDepartment
+        selectDepartment,
+        selectId
 
     */
 
@@ -71,6 +78,8 @@ export const selectPost = (state) => state.login.post
 export const selectUniversity = (state) => state.login.university
 
 export const selectDepartment = (state) => state.login.department
+
+export const selectId = (state) => state.login.id
 
 
 export default loginSlice.reducer

@@ -9,7 +9,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 export default function Department({route, navigation}){
     const [list, setList] = useState([])
+    console.log(route.params)
     const { university } = route.params
+    console.log(university)
     let f=0
 
     useEffect(() => {
@@ -31,7 +33,7 @@ export default function Department({route, navigation}){
                             <TouchableOpacity style={{
                                 backgroundColor: '#f6f6f6',
                              }} 
-                             onPress={()=>navigation.navigate('Session',{
+                             onPress={()=>navigation.navigate('Session List',{
                                 university: university,
                                 department: item.department
                              })}>

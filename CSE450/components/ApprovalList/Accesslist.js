@@ -3,30 +3,42 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import {ip} from '../ip'
-import { selectUniversity, selectPost } from '../Loginslice';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+    updateEmail,
+    updateName,
+    updateToken,
+    updatePost,
+    updateUniversity,
+    updateDepartment,
+    selectEmail,
+    selectName,
+    selectToken,
+    selectPost,
+    selectUniversity,
+    selectDepartment,
+    selectId
+} from '../Loginslice'
 
 
-export default function Section({route, navigation}){
+export default function Accesslist({navigation}){
     const [list, setList] = useState([])
-    const { course_id } = route.params
-    const post= useSelector(selectPost)
+    const university = useSelector(selectUniversity)
+    const id= useSelector(selectId)
     let f=0
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            axios.get(`http://${ip}:5000/section/cid?course_id=${course_id}`)
+            axios.get(`http://${ip}:5000/access/teacher?teacher=${id}`)
             .then(res => {
-                console.log(' data ', res.data) 
+                console.log('for ',university,' data ', res.data) 
+                f=1
                 setList(res.data)
            }) ;
         });
     
         return unsubscribe;
-    }, [navigation]);
-
-
-  
+      }, [navigation]);
 
    console.log('check it out ',f,list)
 
@@ -39,24 +51,17 @@ export default function Section({route, navigation}){
                             <TouchableOpacity style={{
                                 backgroundColor: '#f6f6f6',
                              }} 
-                             onPress={()=>navigation.navigate('Student List',{
-                                section_id: item._id
+                             onPress={()=>navigation.navigate('PrintAc',{
+                                un: item._id,
+                                id: item.id
                              })}>
-                               <Text>{item.section}</Text>
+                               <Text>{item.registration_number}</Text>
+                               <Text>{item.name}</Text>
                              </TouchableOpacity>
                         </li>
                     ))
                 }
             </ul>
-            <Text>
-            {
-                post=='teacher'?<Button onPress={()=>{
-                    navigation.navigate('Create Section',{
-                        course_id: course_id
-                    })
-                }} />:''
-            }
-            </Text>
         </View>
     )
 

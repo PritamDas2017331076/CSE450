@@ -17,41 +17,53 @@ import {
   selectToken,
   selectPost,
   selectUniversity,
-  selectDepartment
+  selectDepartment,
+  selectId
   } from '../Loginslice'
 
-export default function Sessions({navigation}){
-    const [session, setSession] = useState('')
+export default function Courses({route, navigation}){
+    const [section, setSection] = useState('')
     const [list, setList] = useState([])
     const [dist, setDist] = useState([])
     const university = useSelector(selectUniversity)
     const department = useSelector(selectDepartment)
+    const post=useSelector(selectPost)
+    const token=useSelector(selectToken)
+    const id=useSelector(selectId)
+    const {course_id} = route.params
+    console.log('post ',post,'token ',token)
 
     
     const onSubmit = (e) => {
         //e.preventDefault()
 
-        if(!session){
-            alert('Please enter session')
+        if(!section){
+            alert('Please enter section')
             return
         }
+      /*axios.get(`http://${ip}:5000/${post}/me`,{
+        headers: {
+            'Authorization': token
+          }
+      })
+       .then(res=>{
+         console.log('what',res.data)
+         setId(res.data._id)
+       })*/
 
         
 
 
         const Details = {
-          session: session,
-          university: university,
-          department: department
-          
+          course_id: course_id,
+          section: section
         }
-        
         console.log(Details,ip)
 
-         axios.post(`http://${ip}:5000/session/add`,Details)
+         axios.post(`http://${ip}:5000/section/add`,Details)
           .then(res => {
-            console.log('dhead data ',res.data)
-               navigation.navigate('Home')
+            console.log('section data ',res.data)
+               navigation.goBack()
              })
           .catch((error) => {
             console.log(error.message)
@@ -60,7 +72,7 @@ export default function Sessions({navigation}){
 
         /* onAdd({user,email,password,passwordr}) */
 
-        setSession('')
+        setSection('')
         
 
         
@@ -72,13 +84,14 @@ export default function Sessions({navigation}){
             <Form onButtonPress={onSubmit}>
                 
                 <FormItem
-                    label="Email"
+                    label="Section"
                     style={styles.box}
                     isRequired
-                    value={session}
-                    onChangeText={(session) => setSession(session)}
+                    value={section}
+                    onChangeText={(section) => setSection(section)}
                     asterik
                   />
+            
             </Form>
             </ScrollView>
         </View>

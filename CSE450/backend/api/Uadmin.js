@@ -15,6 +15,12 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 })
 
+router.route('/uu').get((req, res) => {
+    const uni = req.query.university
+    UAdmin.find({ university: uni })
+        .then(admins => res.json(admins))
+        .catch(err => res.status(400).json('Error: ' + err));
+})
 router.get('/me', authUAdmin, async(req, res) => {
     try {
         res.status(200).send(req.uadmin)
@@ -121,7 +127,8 @@ router.route('/login').post(async(req, res) => {
         const university = uadmin.university
         const name = uadmin.name
         const email = uadmin.email
-        res.status(200).send({ uadmin, token, post, university, name, email })
+        const id = uadmin._id
+        res.status(200).send({ uadmin, token, post, university, name, email, id })
     } catch (e) {
         res.status(400).json(e)
     }

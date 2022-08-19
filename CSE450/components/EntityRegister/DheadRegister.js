@@ -33,12 +33,12 @@ export default function UAdminRegister({navigation}){
     const [dist, setDist] = useState([])
 
     useEffect(() => {
-          axios.get(`http://${ip}:5000/universities`)
+          axios.get(`http://${ip}:5000/university_admin`)
           .then(res => {
               console.log('data ', res.data) 
 
               setList(res.data.map( (s) => {
-                return {value:s.key, label:s.key}
+                return {value:s.university, label:s.university}
             }))
             console.log(list)
          }) ;

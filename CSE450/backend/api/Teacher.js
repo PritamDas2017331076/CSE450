@@ -20,6 +20,7 @@ router.route('/').get((req, res) => {
 
 router.get('/me', authTeacher, async(req, res) => {
     try {
+        console.log(req.teacher)
         res.status(200).send(req.teacher)
     } catch (e) {
         res.status(500).send()
@@ -129,8 +130,9 @@ router.route('/login').post(async(req, res) => {
         const department = teacher.department
         const name = teacher.name
         const email = teacher.email
+        const id = teacher._id
         console.log(teacher)
-        res.status(200).send({ teacher, token, post, department, university, name, email })
+        res.status(200).send({ teacher, token, post, department, university, name, email, id })
     } catch (e) {
         console.log(e.message)
         res.status(400).json(e)

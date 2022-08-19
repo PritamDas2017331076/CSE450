@@ -13,6 +13,16 @@ import PrintT from '../Print/PrintT'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import Department from '../Lists/Department'
+import Session from '../Lists/Session'
+import Course from '../Lists/Course'
+import Courses from '../Create/Course'
+import Section from '../Lists/Section'
+import StudentlistL from '../Lists/Studentlist'
+import Sectionform from '../Lists/Sectionform'
+import Sections from '../Create/Section'
+import Accesslist from '../ApprovalList/Accesslist'
+import PrintAc from '../Print/PrintAc'
 import {
   updateEmail,
   updateName,
@@ -29,16 +39,32 @@ import {
   
 } from '../Loginslice'
 
-/*const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 
-function ApprovalList(){
+function AccessList(){
   return(
       <Stack.Navigator>
-          <Stack.Screen name="Teacher List" component={Teacherlist} />
-          <Stack.Screen name="PrintTeacher" component={PrintT} />
+          <Stack.Screen name="Access List" component={Accesslist} />
+          <Stack.Screen name="PrintAc" component={PrintAc} />
       </Stack.Navigator>
   )
-}*/
+}
+
+function ApprovalList(){
+  const university = useSelector(selectUniversity)
+  return(
+      <Stack.Navigator>
+          <Stack.Screen name="Department List" component={Department} initialParams={{university: university}} />
+          <Stack.Screen name="Session List" component={Session} />
+          <Stack.Screen name="Course List" component={Course} />
+          <Stack.Screen name="Section List" component={Section} />
+          <Stack.Screen name="Sectionform" component={Sectionform} />
+          <Stack.Screen name="Student List" component={StudentlistL} />
+          <Stack.Screen name="Create Section" component={Sections} />
+          <Stack.Screen component={Courses} name="Create Course" />
+      </Stack.Navigator>
+  )
+}
 
 
 
@@ -113,6 +139,8 @@ export default function Drawer_T({navigation}){
     const DrawerNavigator = ()=>{
       return (
         <Drawer.Navigator drawerContent = {(props)=><CustomDrawer {...props} />} >
+          <Drawer.Screen component={ApprovalList} name="DepartmentList" />
+          <Drawer.Screen component={AccessList} name="AccessList" />
           <Drawer.Screen component={Home} name="Home" />
           <Drawer.Screen component={About} name="About" />
         </Drawer.Navigator>

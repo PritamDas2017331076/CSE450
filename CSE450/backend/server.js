@@ -58,6 +58,12 @@ app.use('/session', session);
 const section = require('./api/Section');
 app.use('/section', section);
 
+const access = require('./api/Access');
+app.use('/access', access);
+
+const studentlist = require('./api/Studentlist');
+app.use('/studentlist', studentlist);
+
 const course = require('./api/Course');
 app.use('/course', course);
 

@@ -17,43 +17,61 @@ import {
   selectToken,
   selectPost,
   selectUniversity,
-  selectDepartment
+  selectDepartment,
+  selectId
   } from '../Loginslice'
 
-export default function UAdminRegister(route, {navigation}){
+export default function Courses({route, navigation}){
     const [code, setCode] = useState('')
     const [name, setName] = useState('')
     const [list, setList] = useState([])
     const [dist, setDist] = useState([])
     const university = useSelector(selectUniversity)
     const department = useSelector(selectDepartment)
-    const {session} = route.params
+    const post=useSelector(selectPost)
+    const token=useSelector(selectToken)
+    const id=useSelector(selectId)
+    const {session_id} = route.params
+    console.log('post ',post,'token ',token)
 
     
     const onSubmit = (e) => {
         //e.preventDefault()
 
-        if(!session){
-            alert('Please enter session')
+        if(!code){
+            alert('Please enter course code')
             return
         }
+
+        if(!code){
+          alert('Please enter course name')
+          return
+      }
+      /*axios.get(`http://${ip}:5000/${post}/me`,{
+        headers: {
+            'Authorization': token
+          }
+      })
+       .then(res=>{
+         console.log('what',res.data)
+         setId(res.data._id)
+       })*/
 
         
 
 
         const Details = {
-          session: session,
-          university: university,
-          department: department,
+          session_id: session_id,
           code: code,
-          name: name
+          name: name,
+          teacher_id: id
         }
         console.log(Details,ip)
 
          axios.post(`http://${ip}:5000/course/add`,Details)
           .then(res => {
             console.log('dhead data ',res.data)
-               navigation.navigate('Home')
+               navigation.goBack()
              })
           .catch((error) => {
             console.log(error.message)
@@ -79,7 +97,7 @@ export default function UAdminRegister(route, {navigation}){
                     style={styles.box}
                     isRequired
                     value={code}
-                    onChangeText={(code) => setSession(code)}
+                    onChangeText={(code) => setCode(code)}
                     asterik
                   />
                 <FormItem
@@ -87,7 +105,7 @@ export default function UAdminRegister(route, {navigation}){
                     style={styles.box}
                     isRequired
                     value={name}
-                    onChangeText={(name) => setSession(name)}
+                    onChangeText={(name) => setName(name)}
                     asterik
                   />
             </Form>
