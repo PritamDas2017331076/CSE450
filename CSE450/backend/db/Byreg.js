@@ -3,21 +3,21 @@ const Schema = mongoose.Schema;
 
 
 const uSchema = new Schema({
-    section: {
+    registration_number: {
         type: String,
         required: true,
     },
-    course_id: {
+    section_id: {
         type: String,
         required: true
     },
-    students: [{
-        id: {
-            type: String,
+    record: [{
+        date: {
+            type: Date,
             required: true
         },
-        registration_number: {
-            type: String,
+        status: {
+            type: Boolean,
             required: true
         }
     }]
@@ -25,6 +25,6 @@ const uSchema = new Schema({
     timestamp: true
 });
 
-const Section = mongoose.model('Section', uSchema);
+const Byreg = mongoose.model('Byreg', uSchema);
 
-module.exports = Section;
+module.exports = Byreg;

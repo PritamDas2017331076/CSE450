@@ -61,6 +61,12 @@ app.use('/section', section);
 const access = require('./api/Access');
 app.use('/access', access);
 
+const byreg = require('./api/Byreg');
+app.use('/byreg', byreg);
+
+const bydate = require('./api/Bydate');
+app.use('/bydate', bydate);
+
 const studentlist = require('./api/Studentlist');
 app.use('/studentlist', studentlist);
 

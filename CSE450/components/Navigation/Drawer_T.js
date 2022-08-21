@@ -17,6 +17,11 @@ import Department from '../Lists/Department'
 import Session from '../Lists/Session'
 import Course from '../Lists/Course'
 import Courses from '../Create/Course'
+import Take from '../Attendence/Take'
+import Date from '../Attendence/Date'
+import PrintDt from '../Attendence/PrintDt'
+import Reg from '../Attendence/Reg'
+import PrintRg from '../Attendence/PrintRg'
 import Section from '../Lists/Section'
 import StudentlistL from '../Lists/Studentlist'
 import Sectionform from '../Lists/Sectionform'
@@ -61,6 +66,11 @@ function ApprovalList(){
           <Stack.Screen name="Sectionform" component={Sectionform} />
           <Stack.Screen name="Student List" component={StudentlistL} />
           <Stack.Screen name="Create Section" component={Sections} />
+          <Stack.Screen name="Take" component={Take} />
+          <Stack.Screen name="Date" component={Date} />
+          <Stack.Screen name="Reg" component={Reg} />
+          <Stack.Screen name="PrintDt" component={PrintDt} />
+          <Stack.Screen name="PrintRg" component={PrintRg} />
           <Stack.Screen component={Courses} name="Create Course" />
       </Stack.Navigator>
   )

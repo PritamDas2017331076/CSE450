@@ -19,7 +19,8 @@ router.route('/ud').get((req, res) => {
 })
 
 router.post('/add', async(req, res) => {
-    const session = new Session({...req.body });
+    const students = []
+    const session = new Session({...req.body, students });
     console.log(session)
 
     try {
@@ -43,6 +44,9 @@ router.get('/:id', async(req, res) => {
         res.status(400).send()
     }
 })
+
+
+
 
 router.delete('/:id', async(req, res) => {
     try {

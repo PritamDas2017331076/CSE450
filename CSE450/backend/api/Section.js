@@ -50,6 +50,87 @@ router.get('/:id', async(req, res) => {
     }
 })
 
+router.patch('/:id', async(req, res) => {
+    let arr = []
+    try {
+        const section = await Section.findById({ _id: req.params.id })
+        if (!section)
+            return res.status(404).send()
+        arr = section.students
+        console.log('arr', arr)
+    } catch (e) {
+        console.log(e)
+        res.status(400).send()
+    }
+    const brr = arr.filter((ele) => (ele.registration_number == req.body.registration_number))
+    if (brr.length > 0) {
+        res.status(500).send('this is already in the list')
+        return
+    }
+    console.log(req.body)
+    arr.push(req.body)
+    const chg = { students: arr }
+
+
+
+    try {
+        const section = await Section.findByIdAndUpdate(req.params.id, chg, { new: true, runValidators: true })
+        if (!section)
+            return res.status(404).send()
+        res.status(200).send(section)
+    } catch (e) {
+        res.status(500).send(e.message)
+    }
+})
+
+
+router.patch('/reg/:id', async(req, res) => {
+    let arr = []
+    try {
+        const section = await Section.findById({ _id: req.params.id })
+        if (!section)
+            return res.status(404).send()
+        arr = section.students
+        console.log('arr', arr)
+    } catch (e) {
+        console.log(e)
+        res.status(400).send()
+    }
+    console.log(req.body)
+    arr = arr.filter((ele) => (ele.registration_number != req.body.registration_number))
+    const chg = { students: arr }
+
+
+
+    try {
+        const section = await Section.findByIdAndUpdate(req.params.id, chg, { new: true, runValidators: true })
+        if (!section)
+            return res.status(404).send()
+        res.status(200).send(section)
+    } catch (e) {
+        res.status(500).send(e.message)
+    }
+})
+
+router.patch('/fn/:id', async(req, res) => {
+
+    try {
+        const session = await Section.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        if (!session)
+            return res.status(404).send()
+        res.status(200).send(session)
+    } catch (e) {
+        res.status(500).send(e.message)
+    }
+})
+
+
+
+
+
+
+
+
 router.delete('/:id', async(req, res) => {
     try {
         const section = await Section.findByIdAndDelete(req.params.id)

@@ -21,7 +21,7 @@ export default function PrintAc({route, navigation}){
 
             axios.get(`http://${ip}:5000/access/${un}`)
             .then(res => {
-                console.log('data for this id ',res.data)
+                console.log('data for this acc ',res.data)
                 setAcc(res.data)
             })
     },[])
@@ -29,14 +29,23 @@ export default function PrintAc({route, navigation}){
     const Accept = ()=>{
         const chg = {
             registration_number: use.registration_number,
-            name: use.name,
-            id: use._id,
-            section_id: acc.section_id,
+            id: use._id
         }
 
-        axios.post(`http://${ip}:5000/studentlist/add`,chg)
+        const chk = {
+            section_id: acc.section_id,
+            registration_number: use.registration_number,
+            record: []
+        }
+
+        axios.patch(`http://${ip}:5000/section/${acc.section_id}`,chg)
             .then(res => {
                 console.log('data added in studentlist ',res.data)
+            })
+
+        axios.post(`http://${ip}:5000/byreg/add`,chk)
+            .then(res => {
+                console.log('data added in byreg ',res.data)
             })
 
         axios.delete(`http://${ip}:5000/access/${un}`)
@@ -49,7 +58,7 @@ export default function PrintAc({route, navigation}){
     const Reject = ()=>{
 
 
-        axios.delete(`http://${ip}:5000/access/${id}`)
+        axios.delete(`http://${ip}:5000/access/${un}`)
             .then(res => {
                 console.log('data deleted in teacher ',res.data)
             })
@@ -62,8 +71,7 @@ export default function PrintAc({route, navigation}){
             <Text>Registration Number: {use.registration_number}</Text>
             <Text>Email: {use.email}</Text>
             <Text>Phone: {use.phone}</Text>
-            <Text>University: {use.university}</Text>
-            <Text>Department: {use.department}</Text>
+            <Text>Course Name: {acc.course_name}</Text>
             <Text>Post: {use.post}</Text>
             <TextInput
               onChangeText={onChangeText}
