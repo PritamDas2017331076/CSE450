@@ -16,6 +16,30 @@ import DheadRegister from '../EntityRegister/DheadRegister'
 
   
 export default function Drawerout({navigation}){
+
+  const NavigationDrawerStructure = (props)=> {
+    //Structure for the navigatin Drawer
+    const toggleDrawer = () => {
+      //Props to open/close the drawer
+      props.navigationProps.toggleDrawer();
+    };
+   
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={()=> toggleDrawer()}>
+          {/*Donute Button Image */}
+          <Image
+            source={{uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png'}}
+            style={{
+              width: 25,
+              height: 25,
+              marginLeft: 5
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
   
   const [input, setInput]=useState('')
   const [cur, setCur] = useState('')
@@ -105,15 +129,32 @@ export default function Drawerout({navigation}){
 
     return (
       <NavigationContainer>
-        <Drawer.Navigator screenOptions={{
-          headerShown: true,
-          headerStyle : { 
-            backgroundColor: 'transparent',
-            elevation: 0, 
-            shadowOpacity: 0
-          },
-          headerTitle: ''
-        }}>
+        <Drawer.Navigator screenOptions={({navigation}) => ({
+                      headerStyle: {
+                      backgroundColor: '#5C6BC0',
+                      },
+                      headerTintColor: '#fff',
+                      headerRight: () => {
+                        return (
+                          <View style={{flexDirection: 'row'}}>
+                            <TouchableOpacity
+                             style={{paddingRight: 8}}
+                             onPress={() => navigation.openDrawer()}>
+                              <Text>open</Text>
+                           </TouchableOpacity>
+            
+                           <TouchableOpacity
+                             style={{paddingRight: 8}}
+                             onPress={() => navigation.closeDrawer()}>
+                              <Text>close</Text>
+                           </TouchableOpacity>
+            
+            
+                          </View>
+                           
+                         );
+                      },
+          })}>
           <Drawer.Screen name="Home" component={Home} />
           <Drawer.Screen name="About" component={About}  />
           <Drawer.Screen name="Studentregister" component={Studentregister}  />

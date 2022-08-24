@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import { Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, FlatList } from 'react-native';
 import {ip} from '../ip'
 import { selectUniversity } from '../Loginslice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,16 +10,23 @@ import { useSelector, useDispatch } from 'react-redux';
 export default function Dheadlist({navigation}){
     const [list, setList] = useState([])
     const university = useSelector(selectUniversity)
+    const [loading, setLoading] = useState(true)
+
     let f=0
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+      let fl=1
+      const unsubscribe = navigation.addListener('focus', () => {
             axios.get(`http://${ip}:5000/approveDh?university=${university}`)
             .then(res => {
                 console.log('for ',university,' data ', res.data) 
-                f=1
-                setList(res.data)
-           }) ;
+                if(fl) setList(res.data)
+            })
+            .catch((error) => console.error(error))
+            .finally(() => {
+               setLoading(false)
+               fl=0 ;
+             });
         });
     
         return unsubscribe;
@@ -27,29 +34,50 @@ export default function Dheadlist({navigation}){
 
    console.log('check it out ',f,list)
 
+   const Item = ({ item }) => (
+    <View style={styles.item}>
+      <TouchableOpacity style={{
+            backgroundColor: '#f6f6f6',
+        }} 
+        onPress={()=>navigation.navigate('PrintDh',{
+            un: item._id,
+            id: item.id
+        })}>
+            <Text>{item.department}</Text>
+        </TouchableOpacity>
+    </View>
+  );
+
+   const renderItem = ({ item }) => (
+    <Item item={item} />
+   );
+
     return(
         <View>
-            <ul>
-                {
-                    list.map(item =>(
-                        <li key={item._id}>
-                            <TouchableOpacity style={{
-                                backgroundColor: '#f6f6f6',
-                             }} 
-                             onPress={()=>navigation.navigate('PrintDh',{
-                                un: item._id,
-                                id: item.id
-                             })}>
-                               <Text>{item.department}</Text>
-                             </TouchableOpacity>
-                        </li>
-                    ))
-                }
-            </ul>
+            {loading?<Text>loading</Text>
+                   :<FlatList
+                         data={list}
+                         renderItem={renderItem}
+                         keyExtractor={item => item._id}
+                       />
+                    }
         </View>
     )
 
-
-
-
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      marginTop: StatusBar.currentHeight || 0,
+    },
+    item: {
+      backgroundColor: '#f9c2ff',
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
+    },
+    title: {
+      fontSize: 32,
+    },
+  });

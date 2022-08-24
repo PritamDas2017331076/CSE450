@@ -17,13 +17,17 @@ export default function StudentlistL({route, navigation}){
     let f=0
 
     useEffect(() => {
-        axios.get(`http://${ip}:5000/section/${section_id}`)
+        let fl=1
+      if(fl==1){axios.get(`http://${ip}:5000/section/${section_id}`)
         .then(res => {
             console.log(' data ', res.data)
             setList(res.data.students.map((item,index)=>{
                 return {registration_number:item.registration_number,status:false,id:index}
             }))
-       }) ;
+       }) ;}
+       return () => {
+           fl=0
+           };
     }, []);
 
    console.log('check it out ',f,list)

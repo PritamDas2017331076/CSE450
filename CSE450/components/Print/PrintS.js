@@ -11,11 +11,15 @@ export default function PrintS({route, navigation}){
     const [text, onChangeText] = useState('')
 
     useEffect(() => {
-        axios.get(`http://${ip}:5000/student/${id}`)
+        let fl=1
+      if(fl==1){axios.get(`http://${ip}:5000/student/${id}`)
             .then(res => {
                 console.log('data for this id ',res.data)
                 setUse(res.data)
-            })
+            })}
+            return () => {
+                fl=0
+                };
     },[])
 
     const Accept = ()=>{

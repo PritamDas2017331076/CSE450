@@ -112,7 +112,21 @@ export default function Drawer({navigation}){
     }
     const DrawerNavigator = ()=>{
       return (
-        <Drawer.Navigator drawerContent = {(props)=><CustomDrawer {...props} />} >
+        <Drawer.Navigator drawerContent = {(props)=><CustomDrawer {...props} />} screenOptions={({navigation}) => ({
+          headerStyle: {
+          backgroundColor: '#5C6BC0',
+          },
+          headerTintColor: '#fff',
+          headerRight: () => {
+            return (
+               <TouchableOpacity
+                 style={{paddingRight: 8}}
+                 onPress={() => navigation.toggleDrawer()}>
+                  <Text>toggle</Text>
+               </TouchableOpacity>
+             );
+          },
+})}>
           <Drawer.Screen component={Home} name="Home" />
           <Drawer.Screen component={About} name="About" />
           <Drawer.Screen component={ApprovalList} name="Approvals" />

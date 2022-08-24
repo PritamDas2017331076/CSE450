@@ -33,37 +33,54 @@ export default function Sectionform({route, navigation}){
     const post = useSelector(selectPost)
     const token = useSelector(selectToken)
     const {course_id} = route.params
+    const [loading1, setLoading1] = useState(true)
+    const [loading2, setLoading2] = useState(true)
+    const [loading3, setLoading3] = useState(true)
+
+
+
 
     useEffect(() => {
-        axios.get(`http://${ip}:5000/section/cid?course_id=${course_id}`)
+      let f1=1,f2=1,f3=1
+      axios.get(`http://${ip}:5000/section/cid?course_id=${course_id}`)
         .then(res => {
             console.log(' data ', res.data)
-            setList(res.data.map( (s) => {
+            if(f1==1) {setList(res.data.map( (s) => {
                 return {value:s._id, label:s.section}
-            }))
-       }) ;
+            }))}
+         })
+         .catch((error) => console.error(error))
+         .finally(() => {
+               setLoading1(false)
+               f1=0 ;
+          });
 
        axios.get(`http://${ip}:5000/${post}/me`,{
           headers:{ 'Authorization': token }
         })
         .then(res=>{
             //console.log('logged in person ',res.data)
-            setName(res.data.name)
+            if(f2==1){setName(res.data.name)
             setId(res.data._id)
-            setRG(res.data.registration_number)
+            setRG(res.data.registration_number)}
         })
-        .catch((err)=>{console.log(err,'error in authentication') })
+        .catch((error) => console.error(error))
+        .finally(() => {
+               setLoading2(false)
+               f2=0 ;
+          });
 
         axios.get(`http://${ip}:5000/course/${course_id}`)
         .then(res=>{
            // console.log('course teacher ',res.data)
-            setTeacher(res.data.teacher_id)
-            setCame(res.data.name)
+            if(f3==1){setTeacher(res.data.teacher_id)
+            setCame(res.data.name)}
         })
-        .catch((error) => {
-            console.log(error.message)
-            alert('error in finding course')
-          })
+        .catch((error) => console.error(error))
+        .finally(() => {
+               setLoading3(false)
+               f3=0 ;
+          });
     }, []);
 
     
@@ -187,7 +204,7 @@ export default function Sectionform({route, navigation}){
 
     return(
         <View style={styles.container}>
-            <ScrollView>
+            {loading1===true || loading2===true || loading3===true?<ScrollView>
             <Form onButtonPress={onSubmit}>
             <Picker
                 items={list}
@@ -203,7 +220,7 @@ export default function Sectionform({route, navigation}){
                 }}
                 />
             </Form>
-            </ScrollView>
+            </ScrollView>:''}
         </View>
     )
 }

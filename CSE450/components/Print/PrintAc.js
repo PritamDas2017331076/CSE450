@@ -13,7 +13,8 @@ export default function PrintAc({route, navigation}){
     const [acc, setAcc] = useState('')
 
     useEffect(() => {
-        axios.get(`http://${ip}:5000/student/${id}`)
+        let fl=1
+      if(fl==1){axios.get(`http://${ip}:5000/student/${id}`)
             .then(res => {
                 console.log('data for this id ',res.data)
                 setUse(res.data)
@@ -23,7 +24,10 @@ export default function PrintAc({route, navigation}){
             .then(res => {
                 console.log('data for this acc ',res.data)
                 setAcc(res.data)
-            })
+            })}
+            return () => {
+                fl=0
+                };
     },[])
 
     const Accept = ()=>{
