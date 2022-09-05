@@ -27,7 +27,7 @@ const uSchema = new Schema({
     }],
     record: [{
         date: {
-            type: Date,
+            type: String,
             required: true
         },
         section: {
