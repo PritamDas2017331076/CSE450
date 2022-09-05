@@ -191,7 +191,7 @@ export default function Sectionform({route, navigation}){
         
 
 
-        
+        navigation.goBack()
 
         setDist('')
         

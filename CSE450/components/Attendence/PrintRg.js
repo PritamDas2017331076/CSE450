@@ -42,7 +42,7 @@ export default function PrintRg({route, navigation}){
   const Item = ({ item }) => (
     <View style={styles.item}>
        <View style={{flexDirection:'row'}}>
-             <Text style={{marginRight :20}}>{item.date.getDay()}-{item.date.getMonth()}-{item.date.getYear()}</Text>
+             <Text style={{marginRight :20}}>{item.date}</Text>
                 <Text>
                 {
                   item.status?'Present':'Absent'

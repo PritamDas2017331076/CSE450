@@ -16,7 +16,7 @@ export default function Take({route, navigation}){
     const [dist, setDist] = useState(list)
     const [record,setRecord]=useState([])
     const [lost,setLost]=useState([])
-    console.log('dist',dist)
+    console.log('dist',dist,dat)
     let f=0
 
     useEffect(() => {
@@ -38,7 +38,7 @@ export default function Take({route, navigation}){
     })
     console.log(dd)
     const dat={
-      date: dat,
+      date: date,
       section: section
     }
     axios.patch(`http://${ip}:5000/course/record/${course_id}`,dat)
@@ -49,18 +49,21 @@ export default function Take({route, navigation}){
       console.log('error while updating record',err)
      })
     const data={
-      date: dat,
+      date: date,
       record: dd,
       course_id: course_id,
       section: section
     }
+    console.log('data = ',data)
+
     axios.post(`http://${ip}:5000/bydate/add`,data)
      .then(res=>{
        console.log('recorded data',res.data)
      })
      dd.map((ele)=>{
       const chg={
-        date: dat,
+        date: date,
+      
       }
       console.log('registration',ele.registration_number,chg)
       axios.patch(`http://${ip}:5000/byreg/sr?course_id=${course_id}&section=${section}&registration_number=${ele.registration_number}`,chg)

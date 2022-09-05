@@ -142,32 +142,27 @@ export default function Course({route, navigation}){
     const Item = ({ item, university, navigation }) => (
         <View style={styles.item}>
             {
-                post=='teacher' && (id==item.teacher_id || fun(item.collaborator)) 
-                ?<Button onPress={()=>section(item._id)} title="section"  />:''
+                post=='teacher' ? (id==item.teacher_id || fun(item.collaborator)) 
+                ?<Button onPress={()=>section(item._id)} title="section"  />:<Text></Text>:<Text></Text>
             }
             {
-                post=='teacher' && !(id==item.teacher_id || fun(item.collaborator))
-                ?<Button onPress={()=>colab(item)} title="collaboration access"  />:''
+                post ==='teacher' ? !(id==item.teacher_id || fun(item.collaborator))
+                ?<Button onPress={()=>colab(item)} title="collaboration access"  />:<Text>op</Text>:<Text>op</Text>
             }
             {
-                post=='student' && fun(item.student)
-                ?<Button onPress={()=>colas(item)} title="student record"  />:''
+                post=='student' ? fun(item.student)
+                ?<Button onPress={()=>colas(item)} title="student record"  />:<Text></Text>:<Text>ljl</Text>
             }
             {
-                (post=='student' && !fun(item.student))
-                ?<Button onPress={()=>accept(item)} title="access request"/>:''
+                post=='student' ? !fun(item.student)
+                ?<Button onPress={()=>accept(item)} title="access request"/>:<Text></Text>:<Text></Text>
             }
             {
-                (post!='student' && post !='teacher')
-                ?<Button onPress={()=>section(item._id)} title="section"/>:''
+                post!='student' ? post !='teacher'
+                ?<Button onPress={()=>section(item._id)} title="section"/>:<Text></Text> :<Text></Text>
             }
            
-          {/* <Button onPress={()=>section(item._id)} title="section"  />
-            <Text>
-                {
-                    post=='student'?<Button onPress={()=>accept(item._id)} title="access request"/>:''
-                }
-            </Text> */}
+        
             <Text>{item.code}</Text>
             <Text>{item.name}</Text>
         </View>
@@ -178,7 +173,11 @@ export default function Course({route, navigation}){
     );
 
     return(
-        <View>
+     
+     <View>
+        <Text>
+            Hello world
+        </Text>
             {loading?<Text>loading</Text>
                    :<FlatList
                          data={list}

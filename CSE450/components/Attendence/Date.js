@@ -41,7 +41,7 @@ export default function Date({route, navigation}){
               course_id: course_id,
               section: section
          })}>
-              <Text>{item.date.getDay()}-{item.date.getMonth()}-{item.date.getYear()}</Text>
+              <Text>{item.date}</Text>
               <Button onPress={()=>{
                     navigation.navigate('Utake',{
                         course_id: course_id,

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const uSchema = new Schema({
     date: {
-        type: Date,
+        type: String,
         required: true,
     },
     course_id: {

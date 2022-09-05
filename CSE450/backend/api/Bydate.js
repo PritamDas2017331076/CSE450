@@ -20,10 +20,11 @@ router.route('/sec').get((req, res) => {
 
 
 router.post('/add', async(req, res) => {
+    console.log('body here',req.body)
     const bydate = new Bydate({...req.body });
 
     try {
-        console.log(bydate)
+        console.log('bydate data',bydate)
         await bydate.save();
         res.status(200).send({ bydate })
     } catch (e) {
