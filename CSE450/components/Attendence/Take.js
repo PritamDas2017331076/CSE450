@@ -12,7 +12,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 export default function Take({route, navigation}){
     const { course_id,list,section } = route.params
     const [date, setDate]=useState('')
-    const [dat, setDat]=useState(new Date())
+    const dat = new Date().toString()
     const [dist, setDist] = useState(list)
     const [record,setRecord]=useState([])
     const [lost,setLost]=useState([])
@@ -37,11 +37,11 @@ export default function Take({route, navigation}){
       }
     })
     console.log(dd)
-    const dat={
-      date: date,
+    const dap={
+      date: dat,
       section: section
     }
-    axios.patch(`http://${ip}:5000/course/record/${course_id}`,dat)
+    axios.patch(`http://${ip}:5000/course/record/${course_id}`,dap)
      .then(res=>{
       console.log('record updated in course',res.data)
      })
@@ -49,7 +49,7 @@ export default function Take({route, navigation}){
       console.log('error while updating record',err)
      })
     const data={
-      date: date,
+      date: dat,
       record: dd,
       course_id: course_id,
       section: section
@@ -62,7 +62,7 @@ export default function Take({route, navigation}){
      })
      dd.map((ele)=>{
       const chg={
-        date: date,
+        date: dat,
       
       }
       console.log('registration',ele.registration_number,chg)
@@ -138,7 +138,7 @@ export default function Take({route, navigation}){
               style={{height: 40}}
               placeholder="enter date"
               onChangeText={newText => setDate(newText)}
-              defaultValue={date}
+              defaultValue={dat}
             />
             <View>
             {/*<ul>
