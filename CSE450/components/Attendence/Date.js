@@ -8,39 +8,54 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 export default function Date({route, navigation}){
-    const { section_id } = route.params
+    const { course_id,section } = route.params
     const [dist,setDist]=useState([])
     const [loading, setLoading] = useState(true)
     let fl=1
 
 
     useEffect(() => {
-        axios.get(`http://${ip}:5000/bydate/sec?section_id=${section_id}`)
+      const unsubscribe = navigation.addListener('focus', () => {
+        axios.get(`http://${ip}:5000/bydate/sec?course_id=${course_id}&section=${section}`)
           .then(res=>{
-            console.log(section_id,res.data)
-            if(fl==1){setDist(res.data.map((item,index)=>{
-                return {date:item.date,record:item.record,id:index}
-            }))}
+            console.log(course_id,res.data)
+            setDist(res.data.map((item,index)=>{
+                return {date:item.date,record:item.record,id:item._id}
+            }))
           })
           .catch((error) => console.error(error))
           .finally(() => {
             setLoading(false)
             fl=0 ;
           });
+        })
 
-  }, []);
+  }, [navigation]);
+
+  console.log(dist)
     const Item = ({ item }) => (
       <View style={styles.item}>
          <TouchableOpacity style={{backgroundColor:'#f6f6f6',margin:20}} 
               onPress={()=>navigation.navigate('PrintDt',{
-                                                                   record: item.record
+              record: item.record,
+              course_id: course_id,
+              section: section
          })}>
-              <Text>{item.date}</Text>
+              <Text>{item.date.getDay()}-{item.date.getMonth()}-{item.date.getYear()}</Text>
+              <Button onPress={()=>{
+                    navigation.navigate('Utake',{
+                        course_id: course_id,
+                        section: section,
+                        record: item.record,
+                        date: item.date,
+                        pid: item.id
+                    })
+                }} title="update"/>
          </TouchableOpacity>
                            
-         <View style={styles.checkboxContainer}>
+         {/* <View style={styles.checkboxContainer}>
               <Text>{item.registration_number}</Text>
-          </View>
+          </View> */}
       </View>
     );
 

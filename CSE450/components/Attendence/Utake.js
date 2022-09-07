@@ -9,21 +9,31 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 
-export default function Take({route, navigation}){
-    const { course_id,list,section } = route.params
-    const [date, setDate]=useState('')
-    const [dat, setDat]=useState(new Date())
-    const [dist, setDist] = useState(list)
-    const [record,setRecord]=useState([])
+export default function Utake({route, navigation}){
+    const { course_id, section, record, date, pid } = route.params
+    const [dist, setDist] = useState([])
     const [lost,setLost]=useState([])
     console.log('dist',dist)
     let f=0
 
     useEffect(() => {
-      let date = new Date().getDate();
-      let month = new Date().getMonth() + 1;
-      let year = new Date().getFullYear();
-      setDate(`${date}-${month}-${year}`)
+      axios.get(`http://${ip}:5000/course/${course_id}`)
+       .then(res=>{
+          console.log('data',res.data.student)
+          let arr=res.data.student
+          setDist(arr.map((item,index)=>{
+            let br=record.filter(ele=>(item.registration_number==ele.registration_number))
+            if(br.length==0){
+                return {registration_number: item.registration_number, avatar: item.avatar, id: item.id, status: false}
+            }else{
+                return {registration_number: item.registration_number, avatar: item.avatar, id: item.id, status: true}
+            }
+          }))
+       })
+       .catch(err=>{
+        console.log('could not find data',err)
+       })
+
 
   }, []);
 
@@ -37,36 +47,30 @@ export default function Take({route, navigation}){
       }
     })
     console.log(dd)
-    const dat={
-      date: dat,
-      section: section
-    }
-    axios.patch(`http://${ip}:5000/course/record/${course_id}`,dat)
-     .then(res=>{
-      console.log('record updated in course',res.data)
-     })
-     .catch(err=>{
-      console.log('error while updating record',err)
-     })
     const data={
-      date: dat,
       record: dd,
-      course_id: course_id,
-      section: section
     }
-    axios.post(`http://${ip}:5000/bydate/add`,data)
+    axios.patch(`http://${ip}:5000/bydate/${pid}`,data)
      .then(res=>{
        console.log('recorded data',res.data)
      })
-     dd.map((ele)=>{
+     dist.map((ele)=>{
       const chg={
-        date: dat,
+        date: date,
       }
       console.log('registration',ele.registration_number,chg)
-      axios.patch(`http://${ip}:5000/byreg/sr?course_id=${course_id}&section=${section}&registration_number=${ele.registration_number}`,chg)
+      if(ele.status==true){
+        axios.patch(`http://${ip}:5000/byreg/sr?course_id=${course_id}&section=${section}&registration_number=${ele.registration_number}`,chg)
         .then(res=>{
-          console.log('for each ',res.data)
+          console.log('date udated sr ',res.data)
         })
+      }
+      else{
+        axios.patch(`http://${ip}:5000/byreg/srd?course_id=${course_id}&section=${section}&registration_number=${ele.registration_number}`,chg)
+        .then(res=>{
+          console.log('date updated srd ',res.data)
+        })
+      }
     })
      navigation.goBack()
 

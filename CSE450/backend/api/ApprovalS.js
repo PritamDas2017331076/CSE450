@@ -22,9 +22,7 @@ router.get('/:secret', async(req, res, next) => {
                 return res.status(404).send({ message: "student Not found." });
             }
 
-            console.log(student.status)
-
-            if (student.status == true) throw new Error('request send already')
+            console.log('student here', student)
 
             student.status = true;
             await student.save(async(err) => {
@@ -38,12 +36,17 @@ router.get('/:secret', async(req, res, next) => {
                 const name = student.name
                 const email = student.email
                 const registration_number = student.registration_number
-                const newApprovalS = new ApprovalS({ id, email, name, registration_number, university, department });
+                const avatar = student.avatar
+                console.log('link', avatar)
+                const newApprovalS = new ApprovalS({ id, email, name, avatar, registration_number, university, department });
                 try {
-                    if (student.activated == true) throw new Error('this account is already acticated')
-                    console.log(newApprovalS)
-                    await newApprovalS.save();
-                    res.status(200).send({ newApprovalS })
+                    if (student.activated == true) {
+                        res.status(200).send('it has been activated')
+                    } else {
+                        console.log('new one', newApprovalS, newApprovalS.avatar)
+                        await newApprovalS.save();
+                        res.status(200).send({ newApprovalS })
+                    }
                 } catch (e) {
                     res.status(400).send(e);
                 }

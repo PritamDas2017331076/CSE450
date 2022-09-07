@@ -1,5 +1,9 @@
-const express = require('express')
-const router = express.Router();
+let express = require('express'),
+    multer = require('multer'),
+    mongoose = require('mongoose'),
+    uuidv4 = require('uuid/v4'),
+    router = express.Router();
+const DIR = './public/';
 const Student = require('../db/Student');
 const authStudent = require('../middleware/authStudent');
 const auth = require('../middleware/authStudent')
@@ -7,6 +11,27 @@ const auth = require('../middleware/authStudent')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const SALT_FACTOR = 10;
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, uuidv4() + '-' + fileName)
+    }
+});
+var upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+});
 
 router.use(express.json())
 router.route('/').get((req, res) => {
@@ -58,7 +83,8 @@ const sendConfirmationEmail = (name, email, secret) => {
 };
 
 
-router.post('/add', async(req, res) => {
+router.post('/add', upload.single('avatar'), async(req, res) => {
+    const url = req.protocol + '://' + req.get('host')
     const name = req.body.name;
     const email = req.body.email;
     const phone = req.body.phone;
@@ -71,6 +97,7 @@ router.post('/add', async(req, res) => {
     const session = req.body.session
     const status = false
     const secret = await jwt.sign({ email: email }, 'thisisnewstudent')
+    const avatar = url + '/public/' + req.file.filename
 
 
 
@@ -83,7 +110,7 @@ router.post('/add', async(req, res) => {
         console.log('student is used')
     }
 
-    const newStudent = new Student({ email, name, phone, secret, status, university, department, post, activated, password, registration_number, session });
+    const newStudent = new Student({ email, name, phone, secret, status, university, avatar, department, post, activated, password, registration_number, session });
     console.log(newStudent)
 
     try {
@@ -125,12 +152,40 @@ router.route('/login').post(async(req, res) => {
         const name = student.name
         const email = student.email
         const id = student._id
+        const avatar = student.avatar
         console.log(student)
-        res.status(200).send({ student, token, post, university, department, name, email, id })
+        res.status(200).send({ student, avatar, token, post, university, department, name, email, id })
     } catch (e) {
         res.status(400).json(e)
     }
 })
+
+// router.patch('/upload-photo', authStudent, uploads.single('avatar'), async(req, res) => {
+//     const studen = req.student
+//     if (!studen) res.status(403).send('student not found')
+//     else {
+//         try {
+//             const photo = req.file.buffer
+//             const image = await sharp(photo).metadata()
+//             const avatar = await sharp(photo).resize(2, 2).toBuffer()
+//             const ava = Buffer.from(avatar, 'binary')
+//             console.log('iamhere')
+//             console.log('avatar and student ', avatar, studen)
+//             const chg = {
+//                 avatar: ava
+//             }
+//             console.log('data to update', chg)
+//             const student = Student.findByIdAndUpdate(studen._id, chg, { new: true, runValidators: true })
+//             console.log(studen)
+//             res.status(201).send(studen)
+//         } catch (e) {
+//             console.log('error occurred', e.message, studen)
+
+//         }
+
+
+//     }
+// })
 
 router.get('/logout', authStudent, async(req, res) => {
     console.log(req.student)

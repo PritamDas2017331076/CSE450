@@ -7,7 +7,11 @@ const uSchema = new Schema({
         type: Date,
         required: true,
     },
-    section_id: {
+    course_id: {
+        type: String,
+        required: true
+    },
+    section: {
         type: String,
         required: true
     },
@@ -16,8 +20,8 @@ const uSchema = new Schema({
             type: String,
             required: true
         },
-        status: {
-            type: Boolean,
+        avatar: {
+            type: String,
             required: true
         }
     }]

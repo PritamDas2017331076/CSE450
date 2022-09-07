@@ -35,7 +35,7 @@ export default function Accesslist({navigation}){
             axios.get(`http://${ip}:5000/access/teacher?teacher=${id}`)
             .then(res => {
                 console.log('for ',university,' data ', res.data) 
-                if(fl) setList(res.data)
+                setList(res.data)
              })
              .catch((error) => console.error(error))
              .finally(() => {

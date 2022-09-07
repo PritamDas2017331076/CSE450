@@ -60,7 +60,7 @@ export default function Courses({route, navigation}){
         }
         console.log(Details,ip)
 
-         axios.post(`http://${ip}:5000/section/add`,Details)
+         axios.patch(`http://${ip}:5000/course/section/${course_id}`,Details)
           .then(res => {
             console.log('section data ',res.data)
                navigation.goBack()

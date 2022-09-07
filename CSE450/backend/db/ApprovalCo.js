@@ -2,16 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const accessSchema = new Schema({
-    course_id: {
+const approveSchema = new Schema({
+    id: {
         type: String,
         required: true,
     },
-    section: {
-        type: String,
-        required: true,
-    },
-    teacher: {
+    email: {
         type: String,
         required: true,
     },
@@ -19,30 +15,30 @@ const accessSchema = new Schema({
         type: String,
         required: true,
     },
-    id: {
+    university: {
         type: String,
         required: true,
     },
-    registration_number: {
+    department: {
+        type: String,
+        required: true,
+    },
+    course_id: {
         type: String,
         required: true,
     },
     course_name: {
         type: String,
-        required: true,
-    },
-    university: {
-        type: String,
-        required: true,
-    },
-    avatar: {
-        type: String,
         required: true
     },
+    teacher: {
+        type: String,
+        required: true,
+    }
 }, {
     timestamp: true
 });
 
-const Access = mongoose.model('Access', accessSchema);
+const ApprovalCo = mongoose.model('ApprovalCo', approveSchema);
 
-module.exports = Access;
+module.exports = ApprovalCo;

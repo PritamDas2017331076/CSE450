@@ -10,6 +10,7 @@ import {ip} from '../ip'
 import About from '../About'
 import Studentlist from '../ApprovalList/Studentlist'
 import PrintT from '../Print/PrintT'
+import PrintRg from '../Attendence/PrintRg'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -58,7 +59,8 @@ function ApprovalList(){
           <Stack.Screen name="Sectionform" component={Sectionform} />
           <Stack.Screen name="Student List" component={StudentlistL} />
           <Stack.Screen name="Create Section" component={Sections} />
-          <Stack.Screen component={Courses} name="Create Course" />
+          <Stack.Screen name="PrintRg" component={PrintRg} />
+          <Stack.Screen name="Create Course" component={Courses}  />
       </Stack.Navigator>
   )
 }

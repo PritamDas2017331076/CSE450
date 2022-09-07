@@ -5,7 +5,7 @@ import { Button, View, Text, StyleSheet, Image, TouchableOpacity, TextInput } fr
 import {ip} from '../ip'
 import { selectUniversity } from '../Loginslice';
 
-export default function PrintAc({route, navigation}){
+export default function PrintAct({route, navigation}){
     const {un, id} = route.params
 
     const [use, setUse] = useState('')
@@ -14,13 +14,13 @@ export default function PrintAc({route, navigation}){
 
     useEffect(() => {
         let fl=1
-      if(fl==1){axios.get(`http://${ip}:5000/student/${id}`)
+      if(fl==1){axios.get(`http://${ip}:5000/teacher/${id}`)
             .then(res => {
                 console.log('data for this id ',res.data)
                 setUse(res.data)
             })
 
-            axios.get(`http://${ip}:5000/access/${un}`)
+            axios.get(`http://${ip}:5000/approveCo/${un}`)
             .then(res => {
                 console.log('data for this acc ',res.data)
                 setAcc(res.data)
@@ -32,34 +32,18 @@ export default function PrintAc({route, navigation}){
 
     const Accept = ()=>{
         const chg = {
-            registration_number: use.registration_number,
-            id: use._id, 
-            section: acc.section,
-            avatar: use.avatar
+            id: acc.id
         }
         console.log(chg)
 
-        const chk = {
-            section: acc.section,
-            registration_number: use.registration_number,
-            course_id: acc.course_id,
-            avatar: use.avatar,
-            record: []
-        }
-
-        axios.patch(`http://${ip}:5000/course/student/${acc.course_id}`,chg)
+        axios.patch(`http://${ip}:5000/course/collaborator/${acc.course_id}`,chg)
             .then(res => {
                 console.log('data added in studentlist ',res.data)
             })
 
-        axios.post(`http://${ip}:5000/byreg/add`,chk)
-            .then(res => {
-                console.log('data added in byreg ',res.data)
-            })
-
-        axios.delete(`http://${ip}:5000/access/${un}`)
+        axios.delete(`http://${ip}:5000/approveCo/${un}`)
            .then(res => {
-                console.log('data deleted in approve access ',res.data)
+                console.log('data deleted in teacher approval colab ',res.data)
             })
         navigation.goBack();
     }
@@ -67,9 +51,9 @@ export default function PrintAc({route, navigation}){
     const Reject = ()=>{
 
 
-        axios.delete(`http://${ip}:5000/access/${un}`)
+        axios.delete(`http://${ip}:5000/approveCo/${un}`)
             .then(res => {
-                console.log('data deleted in teacher ',res.data)
+                console.log('data deleted teacher approval colab ',res.data)
             })
         navigation.goBack();
     }
@@ -79,7 +63,6 @@ export default function PrintAc({route, navigation}){
             <View style={styles.flat}>
                 <View>
                     <Text>Name: {use.name}</Text>
-                    <Text>Registration Number: {use.registration_number}</Text>
                     <Text>Email: {use.email}</Text>
                     <Text>Phone: {use.phone}</Text>
                     <Text>Course Name: {acc.course_name}</Text>

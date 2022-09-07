@@ -18,7 +18,11 @@ router.route('/session').get((req, res) => {
 })
 
 router.post('/add', async(req, res) => {
-    const course = new Course({...req.body });
+    const student = []
+    const collaborator = []
+    const record = []
+    const section = [{ section: "A" }]
+    const course = new Course({...req.body, collaborator, student, record, section });
 
     try {
         console.log(course)
@@ -27,6 +31,105 @@ router.post('/add', async(req, res) => {
     } catch (e) {
         res.status(400).send(e);
     }
+})
+
+router.patch('/collaborator/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.collaborator
+    col = col.filter((ele) => ele.id != req.body.id)
+    const data = { id: req.body.id }
+    col.push(data)
+    const pss = { collaborator: col }
+    const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+    if (!crs) res.status(400).send('not found')
+    else res.status(200).send(crs)
+})
+
+router.patch('/collaboratord/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.collaborator
+    col = col.filter((ele) => ele.id != req.body.id)
+    console.log(col)
+    const pss = { collaborator: col }
+    const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+    if (!crs) res.status(400).send('not found')
+    else res.status(200).send(crs)
+})
+
+router.patch('/student/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.student
+    col = col.filter((ele) => (ele.registration_number != req.body.registration_number))
+    const data = {...req.body }
+    col.push(data)
+    const pss = { student: col }
+    const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+    if (!crs) res.status(400).send('not found')
+    else res.status(200).send(crs)
+})
+
+router.patch('/studentd/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.student
+    col = col.filter((ele) => (ele.registration_number != req.body.registration_number))
+    const pss = { student: col }
+    const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+    if (!crs) res.status(400).send('not found')
+    else res.status(200).send(crs)
+})
+
+router.patch('/section/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.section
+    let com = col.filter((ele) => (ele.section == req.body.section))
+
+    if (com.length == 0) {
+        const data = {...req.body }
+        col.push(data)
+        const pss = { section: col }
+        const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+        if (!crs) res.status(400).send('not found')
+        else res.status(200).send(crs)
+    } else {
+        res.status(200).send('already exists')
+    }
+})
+
+router.patch('/sectiond/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.section
+    col = col.filter((ele) => (ele.section != req.body.section))
+    const pss = { section: col }
+    const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+    if (!crs) res.status(400).send('not found')
+    else res.status(200).send(crs)
+})
+
+router.patch('/record/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.record
+    console.log('col', col)
+    let com = col.filter((ele) => (ele.date == req.body.date && ele.section == req.body.section))
+    if (com.length == 0) {
+        const data = {...req.body }
+        col.push(data)
+        const pss = { record: col }
+        const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+        if (!crs) res.status(400).send('not found')
+        else res.status(200).send(crs)
+    } else {
+        res.status(200).send('it exists already')
+    }
+})
+
+router.patch('/recordd/:id', async(req, res) => {
+    const course = await Course.findById({ _id: req.params.id })
+    let col = course.record
+    col = col.filter((ele) => (ele.date != req.body.date || ele.section != req.body.section))
+    const pss = { section: col }
+    const crs = await Course.findByIdAndUpdate(req.params.id, pss, { new: true, runValidators: true })
+    if (!crs) res.status(400).send('not found')
+    else res.status(200).send(crs)
 })
 
 

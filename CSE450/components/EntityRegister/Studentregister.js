@@ -25,6 +25,7 @@ export default function Studentregister({navigation}){
     const [reg, setReg] = useState('')
     const [department, setDepartment] = useState('')
     const [rpassword, setRPassword] = useState('')
+    const [file, setFile] = useState(null);
     const [list, setList] = useState([])
     const [dist, setDist] = useState([])
     const [sist, setSist] = useState([])
@@ -51,6 +52,16 @@ export default function Studentregister({navigation}){
          }) ;
   
     }, []);
+
+    const onFileChange = e => {
+    
+      // Update the state
+      console.log('value',e.target.files[0])
+      setFile(e.target.files[0]);
+      console.log('file updated',e.target.files[0])
+      console.log(file)
+    
+    };
 
     const dispatch = useDispatch()
     const onSubmit = (e) => {
@@ -107,21 +118,62 @@ export default function Studentregister({navigation}){
           alert('wrong password entered')
           return
       }
+      const formData = new FormData();
+    
+      // Update the formData object
+      formData.append(
+        "avatar",
+        file,
+        file.name
+      );
+      formData.append(
+        "name",
+         name
+      );
+      formData.append(
+        "registration_number",
+         reg
+      );
+      formData.append(
+        "email",
+         email
+      );
+      formData.append(
+        "phone",
+         phone
+      );
 
-        const studentDetails = {
-          name: name,
-          registration_number: reg,
-          email: email,
-          phone: phone,
-          university: university,
-          session: session,
-          department: department,
-          password: password,
-        }
+      formData.append(
+        "university",
+         university
+      );
+      formData.append(
+        "session",
+         session
+      );
+      formData.append(
+        "department",
+         department
+      );
+      formData.append(
+        "password",
+         password
+      );
+
+        // const studentDetails = {
+        //   name: name,
+        //   registration_number: reg,
+        //   email: email,
+        //   phone: phone,
+        //   university: university,
+        //   session: session,
+        //   department: department,
+        //   password: password,
+        // }
         
-        console.log(studentDetails,ip)
+        console.log(formData,ip)
 
-         axios.post(`http://${ip}:5000/student/add`,studentDetails)
+         axios.post(`http://${ip}:5000/student/add`,formData)
           .then(res => {
                   console.log(res.data)
                   navigation.navigate('Home')
@@ -227,6 +279,18 @@ export default function Studentregister({navigation}){
                     onChangeText={(password) => setRPassword(password)}
                     asterik
                   />
+                  <input
+                    type="file"
+                    id="file"
+                    label="avatar"
+                    value={''}
+                    placeholder="avatar"
+                    onChange={(e)=>setFile(e.target.files[0])}
+                    title="ikk"
+                   />
+                   <label htmlFor="file">
+                    {file?<View>{file.name}</View>:<View>no file choolse</View>}
+                   </label>
                  
                    
             </Form>

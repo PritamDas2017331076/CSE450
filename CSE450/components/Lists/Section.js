@@ -18,10 +18,11 @@ export default function Section({route, navigation}){
     useEffect(() => {
       let fl=1
       const unsubscribe = navigation.addListener('focus', () => {
-            axios.get(`http://${ip}:5000/section/cid?course_id=${course_id}`)
+            console.log('in section it is not')
+            axios.get(`http://${ip}:5000/course/${course_id}`)
             .then(res => {
                 console.log(' data ', res.data) 
-                if(fl) setList(res.data)
+                setList(res.data.section)
              })
              .catch((error) => console.error(error))
              .finally(() => {
@@ -40,7 +41,8 @@ export default function Section({route, navigation}){
             backgroundColor: '#f6f6f6',
           }} 
             onPress={()=>navigation.navigate('Student List',{
-            section_id: item._id
+            course_id: course_id, 
+            section: item.section
         })}>
             <Text>{item.section}</Text>
         </TouchableOpacity>

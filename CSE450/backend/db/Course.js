@@ -18,7 +18,47 @@ const uSchema = new Schema({
     teacher_id: {
         type: String,
         required: true
-    }
+    },
+    section: [{
+        section: {
+            type: String,
+            required: true
+        }
+    }],
+    record: [{
+        date: {
+            type: Date,
+            required: true
+        },
+        section: {
+            type: String,
+            required: true
+        }
+    }],
+    collaborator: [{
+        id: {
+            type: String,
+            required: true,
+        }
+    }],
+    student: [{
+        id: {
+            type: String,
+            required: true
+        },
+        registration_number: {
+            type: String,
+            required: true
+        },
+        section: {
+            type: String,
+            required: true
+        },
+        avatar: {
+            type: String,
+            required: true
+        }
+    }]
 }, {
     timestamp: true
 });

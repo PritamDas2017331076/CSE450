@@ -17,19 +17,22 @@ import {
   selectToken,
   selectPost,
   selectUniversity,
-  selectDepartment
+  selectDepartment,
+  selectAvatar
   } from '../Loginslice'
 
 export default function Sectionform({route, navigation}){
     const [registration_number, setRG] = useState('')
     const [name, setName] = useState('')
     const [came, setCame] = useState('')
+    const [dd, setdd]= useState('')
     const [id, setId] = useState('')
     const [idd,setIdd]=useState('')
     const [list, setList] = useState([])
     const [dist, setDist] = useState('')
     const [teacher, setTeacher] = useState('')
     const university = useSelector(selectUniversity)
+    const avatar = useSelector(selectAvatar)
     const post = useSelector(selectPost)
     const token = useSelector(selectToken)
     const {course_id} = route.params
@@ -41,13 +44,16 @@ export default function Sectionform({route, navigation}){
 
 
     useEffect(() => {
+      console.log(avatar)
       let f1=1,f2=1,f3=1
-      axios.get(`http://${ip}:5000/section/cid?course_id=${course_id}`)
+      axios.get(`http://${ip}:5000/course/${course_id}`)
         .then(res => {
             console.log(' data ', res.data)
-            if(f1==1) {setList(res.data.map( (s) => {
+            setList(res.data.section.map( (s) => {
                 return {value:s._id, label:s.section}
-            }))}
+            }))
+            setTeacher(res.data.teacher_id)
+            setCame(res.data.name)
          })
          .catch((error) => console.error(error))
          .finally(() => {
@@ -60,9 +66,10 @@ export default function Sectionform({route, navigation}){
         })
         .then(res=>{
             //console.log('logged in person ',res.data)
-            if(f2==1){setName(res.data.name)
+            setName(res.data.name)
             setId(res.data._id)
-            setRG(res.data.registration_number)}
+            setRG(res.data.registration_number)
+            console.log('student info',name,id,registration_number)
         })
         .catch((error) => console.error(error))
         .finally(() => {
@@ -70,17 +77,6 @@ export default function Sectionform({route, navigation}){
                f2=0 ;
           });
 
-        axios.get(`http://${ip}:5000/course/${course_id}`)
-        .then(res=>{
-           // console.log('course teacher ',res.data)
-            if(f3==1){setTeacher(res.data.teacher_id)
-            setCame(res.data.name)}
-        })
-        .catch((error) => console.error(error))
-        .finally(() => {
-               setLoading3(false)
-               f3=0 ;
-          });
     }, []);
 
     
@@ -132,14 +128,15 @@ export default function Sectionform({route, navigation}){
         console.log('idd ',idd)
 
         const details = {
-          section_id: idd,
-          section: dist,
+          course_id: course_id,
+          section: dd,
           teacher: teacher,
           name: name, // student name
           registration_number: registration_number,
           id: id, // student id
           course_name: came,
           university: university,
+          avatar: avatar,
 
         }
         console.log('details ',details)
@@ -217,6 +214,7 @@ export default function Sectionform({route, navigation}){
                   const bs=item
                   console.log(bs)
                   setIdd(bs.value)
+                  setdd(bs.label)
                 }}
                 />
             </Form>

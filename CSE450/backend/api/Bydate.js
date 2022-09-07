@@ -11,8 +11,9 @@ router.route('/').get((req, res) => {
 })
 
 router.route('/sec').get((req, res) => {
-    const section_id = req.query.section_id
-    Bydate.find({ section_id: section_id })
+    const course_id = req.query.course_id
+    const section = req.query.section
+    Bydate.find({ course_id: course_id, section: section })
         .then(bydate => res.json(bydate))
         .catch(err => res.status(400).json('Error: ' + err));
 })

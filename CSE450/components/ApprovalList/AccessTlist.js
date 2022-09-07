@@ -3,33 +3,50 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { Button, View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, FlatList } from 'react-native';
 import {ip} from '../ip'
-import { selectUniversity, selectDepartment } from '../Loginslice';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+    updateEmail,
+    updateName,
+    updateToken,
+    updatePost,
+    updateUniversity,
+    updateDepartment,
+    selectEmail,
+    selectName,
+    selectToken,
+    selectPost,
+    selectUniversity,
+    selectDepartment,
+    selectId
+} from '../Loginslice'
 
 
-export default function Studentlist({navigation}){
+export default function AccessTlist({navigation}){
     const [list, setList] = useState([])
     const university = useSelector(selectUniversity)
-    const [loading, setLoading] = useState(true)
-    const department = useSelector(selectDepartment)
+    const id= useSelector(selectId)
     let f=0
+    const [loading, setLoading] = useState(true)
+
 
     useEffect(() => {
-      let fl=1
-      const unsubscribe = navigation.addListener('focus', () => {
-            axios.get(`http://${ip}:5000/approveS?university=${university}&department=${department}`)
+        console.log(id)
+        let fl=1
+        const unsubscribe = navigation.addListener('focus', () => {
+            axios.get(`http://${ip}:5000/approveCo/teacher?teacher=${id}`)
             .then(res => {
-                console.log('for ',university, department,' data ', res.data) 
+                console.log('for ',university,' data ', res.data) 
                 setList(res.data)
-            })
-            .catch((error) => console.error(error))
-            .finally(() => {
+             })
+             .catch((error) => console.error(error))
+             .finally(() => {
                setLoading(false)
                fl=0 ;
              });
         });
     
         return unsubscribe;
+
       }, [navigation]);
 
    console.log('check it out ',f,list)
@@ -38,24 +55,22 @@ export default function Studentlist({navigation}){
     <View style={styles.item}>
       <TouchableOpacity style={{
             backgroundColor: '#f6f6f6',
-            margin: 20
-           }} 
-           onPress={()=>navigation.navigate('PrintS',{
+            }} 
+            onPress={()=>navigation.navigate('PrintAct',{
                 un: item._id,
                 id: item.id
-      })}>
-          <View>
+        })}>
             <Text>{item.name}</Text>
             <Text>{item.email}</Text>
-            <Text>{item.registration_number}</Text>
-          </View>
-        </TouchableOpacity>
+            <Text>{item.course_name}</Text>
+      </TouchableOpacity>
     </View>
   );
 
    const renderItem = ({ item }) => (
     <Item item={item} />
    );
+
 
     return(
         <View>
@@ -68,9 +83,6 @@ export default function Studentlist({navigation}){
                     }
         </View>
     )
-
-
-
 
 }
 
@@ -89,3 +101,4 @@ const styles = StyleSheet.create({
       fontSize: 32,
     },
   });
+  

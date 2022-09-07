@@ -8,18 +8,28 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 export default function PrintRg({route, navigation}){
-    const { section_id, registration_number } = route.params
+    const { course_id, record, section } = route.params
     const [dist, setDist] = useState([])
     const [loading, setLoading] = useState(true)
-    console.log('section id, registration number',section_id,registration_number)
+    console.log('course id',course_id)
     let fl=1
 
 
     useEffect(() => {
-        axios.get(`http://${ip}:5000/byreg/srr?section_id=${section_id}&registration_number=${registration_number}`)
+        axios.get(`http://${ip}:5000/course/${course_id}`)
           .then(res=>{
-            console.log('section info ',section_id,res.data)
-            if(fl==1) setDist(res.data.record)
+            console.log('course info ',course_id,res.data)
+            let arr=res.data.record
+            arr=arr.filter(ele=>(ele.section==section))
+            setDist(res.data.record.map((item,index)=>{
+                let rec=record.filter(ele=>(ele.date==item.date))
+                if(rec.length!=0){
+                  return {date: item.date,status:true,id:index }
+                }
+                else{
+                  return {date: item.date,status:false,id:index}
+                }
+            }))
           })
           .catch((error) => console.error('error',error.message))
           .finally(() => {
@@ -32,7 +42,7 @@ export default function PrintRg({route, navigation}){
   const Item = ({ item }) => (
     <View style={styles.item}>
        <View style={{flexDirection:'row'}}>
-             <Text style={{marginRight :20}}>{item.date}</Text>
+             <Text style={{marginRight :20}}>{item.date.getDay()}-{item.date.getMonth()}-{item.date.getYear()}</Text>
                 <Text>
                 {
                   item.status?'Present':'Absent'
@@ -54,7 +64,7 @@ export default function PrintRg({route, navigation}){
                    :<FlatList
                          data={dist}
                          renderItem={renderItem}
-                         keyExtractor={item => item._id}
+                         keyExtractor={item => item.id}
                        />
                     }
        

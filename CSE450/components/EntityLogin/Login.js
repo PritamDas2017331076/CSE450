@@ -12,6 +12,7 @@ import {
   updateUniversity,
   updateDepartment,
   updateId,
+  updateAvatar,
   selectEmail,
   selectName,
   selectToken,
@@ -81,6 +82,7 @@ export default function Studentlogin({navigation}){
                   if(res.data.department) dispatch(updateDepartment(res.data.department))
                   if(res.data.name) dispatch(updateName(res.data.name))
                   if(res.data.email) dispatch(updateEmail(res.data.email))
+                  if(res.data.avatar) dispatch(updateAvatar(res.data.avatar))
                   navigation.navigate('Home')
               }
            ) 

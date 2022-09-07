@@ -18,6 +18,7 @@ import Session from '../Lists/Session'
 import Course from '../Lists/Course'
 import Courses from '../Create/Course'
 import Take from '../Attendence/Take'
+import Utake from '../Attendence/Utake'
 import Date from '../Attendence/Date'
 import PrintDt from '../Attendence/PrintDt'
 import Reg from '../Attendence/Reg'
@@ -27,7 +28,10 @@ import StudentlistL from '../Lists/Studentlist'
 import Sectionform from '../Lists/Sectionform'
 import Sections from '../Create/Section'
 import Accesslist from '../ApprovalList/Accesslist'
+import AccessTlist from '../ApprovalList/AccessTlist'
 import PrintAc from '../Print/PrintAc'
+import PrintAct from '../Print/PrintAct'
+
 import {
   updateEmail,
   updateName,
@@ -55,6 +59,15 @@ function AccessList(){
   )
 }
 
+function AccessListTeacher(){
+  return(
+      <Stack.Navigator>
+          <Stack.Screen name="Access List Teacher" component={AccessTlist} />
+          <Stack.Screen name="PrintAct" component={PrintAct} />
+      </Stack.Navigator>
+  )
+}
+
 function ApprovalList(){
   const university = useSelector(selectUniversity)
   return(
@@ -67,6 +80,7 @@ function ApprovalList(){
           <Stack.Screen name="Student List" component={StudentlistL} />
           <Stack.Screen name="Create Section" component={Sections} />
           <Stack.Screen name="Take" component={Take} />
+          <Stack.Screen name="Utake" component={Utake} />
           <Stack.Screen name="Date" component={Date} />
           <Stack.Screen name="Reg" component={Reg} />
           <Stack.Screen name="PrintDt" component={PrintDt} />
@@ -175,7 +189,8 @@ export default function Drawer_T({navigation}){
           },
 })}>
           <Drawer.Screen component={ApprovalList} name="DepartmentList" />
-          <Drawer.Screen component={AccessList} name="AccessList" />
+          <Drawer.Screen component={AccessList} name="AccessListStudent" />
+          <Drawer.Screen component={AccessListTeacher} name="AccessListeacher" />
           <Drawer.Screen component={Home} name="Home" />
           <Drawer.Screen component={About} name="About" />
         </Drawer.Navigator>

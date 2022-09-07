@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 export default function StudentlistL({route, navigation}){
     const [list, setList] = useState([])
-    const { section_id } = route.params
+    const [cur, setCur] = useState([])
+    const { course_id, section } = route.params
     const [one, setOne]=useState(false)
     const [two, setTwo]=useState(false)
     const [three, setThree]=useState(false)
@@ -17,17 +18,18 @@ export default function StudentlistL({route, navigation}){
     let f=0
 
     useEffect(() => {
-        let fl=1
-      if(fl==1){axios.get(`http://${ip}:5000/section/${section_id}`)
+        console.log('section',section)
+      axios.get(`http://${ip}:5000/course/${course_id}`)
         .then(res => {
-            console.log(' data ', res.data)
-            setList(res.data.students.map((item,index)=>{
-                return {registration_number:item.registration_number,status:false,id:index}
+            console.log(' data ', res.data.student)
+            let arr=res.data.student
+            console.log(arr)
+            arr=arr.filter(item=>(item.section==section))
+            console.log(arr)
+            setList(arr.map((item,index)=>{
+                return {registration_number:item.registration_number,status:false,avatar:item.avatar,id:index}
             }))
-       }) ;}
-       return () => {
-           fl=0
-           };
+       }) ;
     }, []);
 
    console.log('check it out ',f,list)
@@ -56,14 +58,17 @@ export default function StudentlistL({route, navigation}){
         <View>
             <View>
                 <Button onPress={()=>navigation.navigate('Take',{
-                    section_id: section_id,
-                    list: list
+                    course_id: course_id,
+                    list: list, // student list
+                    section: section
                 })} title="take attendence" />
                 <Button onPress={()=>navigation.navigate('Date',{
-                    section_id: section_id,
+                    course_id: course_id,
+                    section: section
                 })} title="show dates" />
                 <Button onPress={()=>navigation.navigate('Reg',{
-                    section_id: section_id,
+                    course_id: course_id,
+                    section: section
                 })} title="show registration numbers" />
             </View>
             {/*<ul>

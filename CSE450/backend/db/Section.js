@@ -11,16 +11,6 @@ const uSchema = new Schema({
         type: String,
         required: true
     },
-    students: [{
-        id: {
-            type: String,
-            required: true
-        },
-        registration_number: {
-            type: String,
-            required: true
-        }
-    }]
 }, {
     timestamp: true
 });

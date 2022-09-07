@@ -11,6 +11,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/public', express.static('public'));
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
@@ -42,6 +43,9 @@ app.use('/approveT', approveTRouter);
 
 const Approval = require('./api/Approval.js');
 app.use('/approve', Approval);
+
+const ApprovalCo = require('./api/ApprovalCo.js');
+app.use('/approveCo', ApprovalCo);
 
 const ApprovalS = require('./api/ApprovalS.js');
 app.use('/approveS', ApprovalS);
